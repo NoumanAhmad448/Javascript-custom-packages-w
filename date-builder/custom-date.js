@@ -153,3 +153,73 @@ const getCustomMonthDate = (givenDateFormat, numberOfMonths) => {
         return monthName[month]
     }
   }
+
+
+/****************************************************************
+ *
+ * @description
+ * getDay uses to get the day name in english format
+ *
+ * @examples
+ * getDay("year-month-day")
+ * 
+ *
+ * @return String
+ ***************************************************************/
+ const dayFinder = (dayInNumberFormat) => {
+    return {0: 'Sunday', 1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thrusday", 5: "Friday", 6: "Saturday" }[dayInNumberFormat]
+ }
+ const getDay = (givenDate) => {
+      if(typeof givenDate !== 'string') throw new Error("givenDate: given date is not in string format")
+      try{
+          return dayFinder(new Date(givenDate).getDay())
+      }catch(err){
+          console.error(`getDay: ${err}`)
+      }
+  }
+
+/****************************************************************
+ *
+ * @description
+ * weekStartDate gives you week start date of provided date
+ * week starts with monday
+ *
+ * @examples
+ * weekStartDate("year-month-day")
+ *
+ *
+ * @return String
+ ***************************************************************/
+
+ const weekStartDate = (givenDate,debug=false) => {
+     if(typeof givenDate !== "string") throw new Error("given date is not in string format")
+     let day = new Date(givenDate).getDay()
+     if(day != 1){
+         if(day === 0){
+             return getCustomDate(givenDate,-6,debug)
+         }
+        return getCustomDate(givenDate,-(day-1),debug)
+     }else{
+         return givenDate
+     }
+ }
+/****************************************************************
+ *
+ * @description
+ * weekEndDate uses to get the last day date starting week from monday
+ *
+ * @examples
+ * weekEndDate("year-month-day")
+ *
+ *
+ * @return String
+ ***************************************************************/
+ const weekEndDate = (givenDate,debug=false) => {
+    if(typeof givenDate !== "string") throw new Error("given date is not in string format")
+    let day = new Date(givenDate).getDay()
+    if(day != 0){
+       return getCustomDate(givenDate,(7-day),debug)
+    }else{
+        return givenDate
+    }
+}
