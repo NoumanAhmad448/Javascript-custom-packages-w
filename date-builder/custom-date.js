@@ -155,6 +155,86 @@ const getCustomMonthDate = (givenDateFormat, numberOfMonths) => {
   }
 
 
+
+  /****************************************************************
+  *
+  * @description
+  * isDateValid check that provided date format is valid/invalid
+  *
+  * @examples
+  * isDateValid("year-month-day") gives
+  *
+  *
+  * @return Boolean
+  *
+  *****************************************************************/
+
+
+  const isDateValid = (givenDate,debug=false) => {
+      if(typeof(givenDate) !== "string") throw new Error("isDateValid: given date format should be string")
+      if(givenDate.trim() === '') throw new Error("isDateValid: given date cannot be empty")
+
+      if([8,9,10].indexOf(givenDate.length) === -1) {
+          if(debug) console.log("given date format is exceeding length of 10 characters");
+          return false;
+      }
+
+      if(givenDate.split("-").length < 3){
+        if(debug) console.log("given date format is exceeding length of 10 characters")
+        return false
+      }
+
+      let [yearFormat,monthFormat,dayFormat] = givenDate.split("-")
+      try{
+          parseInt(yearFormat)
+      }catch(err){
+          if(debug) console.log("isDateValid: year format is invalid")
+          return false
+      }
+
+      if(yearFormat === "0000" || (yearFormat[0] === "0" && yearFormat[1] === "0")){
+          if(debug) console.log(`isDateValid: year format is invalid. Either of 
+            first two digit cannot be zero`)
+          return false
+      }
+
+      if(yearFormat.length != 4){
+          if(debug) console.log("isDateValid: date should be in Y-M-D format")
+          return false
+      }
+
+      try{
+          monthFormat = parseInt(monthFormat)
+      }
+      catch(err){
+          if(debug) console.log("isDateValid: month format is invalid")
+          return false
+      }
+
+      if(monthFormat > 12) {
+          if(debug) console.log("isDateValid: there are only twelve months in one year")
+          return false
+      }
+      
+      try{
+          dayFormat = parseInt(dayFormat)
+      }catch(err){
+          if(debug) console.log("isDateValid: day can only be in number/integer format")
+          return false
+      }
+
+      if(dayFormat == 00) {
+          if(debug) console.log("isDateValid: 00 is considered invalid day format")
+          return false
+      }
+
+      if(dayFormat.toString().length > 2){
+          if(debug) console.log("isDateValid: date should be in Y-M-D format")
+          return false
+      }
+      return true
+
+  }
 /****************************************************************
  *
  * @description
