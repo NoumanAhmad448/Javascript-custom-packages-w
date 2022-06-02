@@ -7,22 +7,11 @@
     <title>Tester</title>
 </head>
 <body>
-    <script type="text/javascript" src="./date-builder/custom-date.js"></script>
+    <script type="text/javascript" src="./currency-builder/currency-builder.js"></script>
     <script>
-        let ob = weekEndDate("2022-06-01")
-        console.log(ob)
-        ob = weekEndDate("2022-06-02")
-        console.log(ob)
-        ob = weekEndDate("2022-06-03")
-        console.log(ob)
-        ob = weekEndDate("2022-06-04")
-        console.log(ob)
-        ob = weekEndDate("2022-06-05")
-        console.log(ob)
-        ob = weekEndDate("2022-06-06")
-        console.log(ob)
-        ob = weekEndDate("2022-06-07")
-        console.log(ob)
+        for($i=1;$i<=999;$i++){
+            console.log($i," =>",currencyInWords($i.toString()))
+        }
         
     </script>
 </body>
