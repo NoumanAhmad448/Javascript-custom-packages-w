@@ -14,10 +14,23 @@ function convertDigitToWords(digit){
     return {"2": "twenty", "3": "thirty", "4": "forty", "5" : "fifty", "6": "sixty", "7": "seventy","8": "eighty", "9": "ninety"}[digit]
 }
 
+const countUpToTwoDigits = (number) => {
+    if(parseInt(number) <= 20){
+        return numberInWords(number)
+    }else{
+        return ((convertDigitToWords(number[0])) + " " +(number[1] !== "0" ? (numberInWords(number[1])) : ''))
+    }
+}
+const countUpToHunderds = (number) => {
+    let lastTwoDig = parseInt(number.slice(1))            
+    return `${numberInWords(number[0])} hundred ${lastTwoDig !== 0 ? 
+                    "and "+ countUpToTwoDigits(lastTwoDig.toString()) : ''}`
+}
+
 /****************************************************************
  *
  * @description
- * currencyInWords gives currency in words
+ * currencyInWords gives currency in words upto 9999
  * 
  * @signature
  * currencyInWords(number String|Number) returns String|false
@@ -46,23 +59,38 @@ const currencyInWords = (number, debug=false) => {
         return false
     }
 
+    let currencyInWords = ""
     switch (number.length) {
         case 1:
-            return numberInWords(number)
+            currencyInWords = numberInWords(number)
             break;
         case 2:
-            if(parseInt(number) <= 20){
-                return numberInWords(number)
-            }else{
-                return ((convertDigitToWords(number[0])) + " " +(number[1] !== "0" ? (numberInWords(number[1])) : '')).trim()
-            }
+            currencyInWords = countUpToTwoDigits(number)
             break;
         case 3:
-            let lastTwoDig = parseInt(number.slice(1))            
-            return `${numberInWords(number[0])} hundred ${lastTwoDig < 21  ? (lastTwoDig !== 0 ? "and "+ numberInWords(lastTwoDig.toString()) : '') : 
-                    "and "+convertDigitToWords(number[1]) + ' ' + (number[2] === "0" ? "" : numberInWords(number[2]))}`.trim()
+            currencyInWords = countUpToHunderds(number)
+            break;    
+        case 4:
+            let lastThreeDig = parseInt(number.slice(1)) 
+            
+            let twoDigits = parseInt(number.slice(1,3))
+            let finalNum = function(twoDigits,lastThreeDig){
+                if(twoDigits === 0){
+                    if(lastThreeDig === 0) return ''
+                    return "and "+ numberInWords(lastThreeDig.toString())
+                }else if(lastThreeDig.toString().length == 2){
+                    return "and " + countUpToTwoDigits(lastThreeDig.toString())
+                }else{
+                    return "and " + countUpToHunderds(lastThreeDig.toString())
+                }
+            }
+
+            finalNum = finalNum(twoDigits,lastThreeDig)
+            currencyInWords = `${numberInWords(number[0])} thousand ` + finalNum                        
             break;    
         default:
+            return false
             break;
     }
+    return currencyInWords.trim()
 }
